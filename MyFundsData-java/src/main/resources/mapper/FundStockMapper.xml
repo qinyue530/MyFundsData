@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myfunds.mapper.FundStockMapper">
+    <resultMap id="FundStockResultMap" type="com.example.myfunds.entity.FundStock">
+        <id column="ID" property="id" />
+        <result column="FUND_ID" property="fund.id" />
+        <result column="STOCK_CODE" property="stockCode" />
+        <result column="STOCK_NAME" property="stockName" />
+        <result column="HOLDING_RATIO" property="holdingRatio" />
+        <result column="STOCK_PRICE" property="stockPrice" />
+        <result column="DAY_GROWTH" property="dayGrowth" />
+        <result column="HOLDING_VALUE" property="holdingValue" />
+        <result column="REPORT_DATE" property="reportDate" />
+        <result column="CREATED_TIME" property="createdTime" />
+        <result column="UPDATED_TIME" property="updatedTime" />
+    </resultMap>
+
+    <insert id="insert" parameterType="FundStock" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO FUND_STOCK (
+            FUND_ID, STOCK_CODE, STOCK_NAME, HOLDING_RATIO, STOCK_PRICE, 
+            DAY_GROWTH, HOLDING_VALUE, REPORT_DATE, CREATED_TIME, UPDATED_TIME
+        ) VALUES (
+            #{fund.id}, #{stockCode}, #{stockName}, #{holdingRatio}, #{stockPrice}, 
+            #{dayGrowth}, #{holdingValue}, #{reportDate}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="FundStock">
+        UPDATE FUND_STOCK SET
+            STOCK_CODE = #{stockCode},
+            STOCK_NAME = #{stockName},
+            HOLDING_RATIO = #{holdingRatio},
+            STOCK_PRICE = #{stockPrice},
+            DAY_GROWTH = #{dayGrowth},
+            HOLDING_VALUE = #{holdingValue},
+            REPORT_DATE = #{reportDate},
+            UPDATED_TIME = NOW()
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM FUND_STOCK WHERE ID = #{id}
+    </delete>
+
+    <delete id="deleteByFundId" parameterType="Long">
+        DELETE FROM FUND_STOCK WHERE FUND_ID = #{fundId}
+    </delete>
+
+    <select id="selectById" parameterType="Long" resultMap="FundStockResultMap">
+        SELECT * FROM FUND_STOCK WHERE ID = #{id}
+    </select>
+
+    <select id="selectByFundId" parameterType="Long" resultMap="FundStockResultMap">
+        SELECT * FROM FUND_STOCK WHERE FUND_ID = #{fundId}
+    </select>
+
+    <select id="selectAll" resultMap="FundStockResultMap">
+        SELECT * FROM FUND_STOCK
+    </select>
+</mapper>

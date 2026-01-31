@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myfunds.mapper.UserFundMapper">
+    <resultMap id="UserFundResultMap" type="com.example.myfunds.entity.UserFund">
+        <id column="ID" property="id" />
+        <result column="FUND_ID" property="fund.id" />
+        <result column="USER_ID" property="userId" />
+        <result column="TOTAL_SHARES" property="totalShares" />
+        <result column="AVERAGE_COST" property="averageCost" />
+        <result column="TOTAL_COST" property="totalCost" />
+        <result column="CURRENT_VALUE" property="currentValue" />
+        <result column="PROFIT_LOSS" property="profitLoss" />
+        <result column="PROFIT_LOSS_RATIO" property="profitLossRatio" />
+        <result column="CREATED_TIME" property="createdTime" />
+        <result column="UPDATED_TIME" property="updatedTime" />
+    </resultMap>
+
+    <insert id="insert" parameterType="UserFund" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO USER_FUND (
+            FUND_ID, USER_ID, TOTAL_SHARES, AVERAGE_COST, TOTAL_COST, 
+            CURRENT_VALUE, PROFIT_LOSS, PROFIT_LOSS_RATIO, CREATED_TIME, UPDATED_TIME
+        ) VALUES (
+            #{fund.id}, #{userId}, #{totalShares}, #{averageCost}, #{totalCost}, 
+            #{currentValue}, #{profitLoss}, #{profitLossRatio}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="UserFund">
+        UPDATE USER_FUND SET
+            TOTAL_SHARES = #{totalShares},
+            AVERAGE_COST = #{averageCost},
+            TOTAL_COST = #{totalCost},
+            CURRENT_VALUE = #{currentValue},
+            PROFIT_LOSS = #{profitLoss},
+            PROFIT_LOSS_RATIO = #{profitLossRatio},
+            UPDATED_TIME = NOW()
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM USER_FUND WHERE ID = #{id}
+    </delete>
+
+    <select id="selectById" parameterType="Long" resultMap="UserFundResultMap">
+        SELECT * FROM USER_FUND WHERE ID = #{id}
+    </select>
+
+    <select id="selectByUserIdAndFundId" parameterType="map" resultMap="UserFundResultMap">
+        SELECT * FROM USER_FUND WHERE USER_ID = #{userId} AND FUND_ID = #{fundId}
+    </select>
+
+    <select id="selectByUserId" parameterType="Long" resultMap="UserFundResultMap">
+        SELECT * FROM USER_FUND WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="existsByUserIdAndFundId" parameterType="map" resultType="Boolean">
+        SELECT COUNT(*) > 0 FROM USER_FUND WHERE USER_ID = #{userId} AND FUND_ID = #{fundId}
+    </select>
+</mapper>

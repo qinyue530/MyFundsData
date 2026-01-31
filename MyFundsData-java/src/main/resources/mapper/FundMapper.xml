@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myfunds.mapper.FundMapper">
+    <resultMap id="FundResultMap" type="com.example.myfunds.entity.Fund">
+        <id column="ID" property="id" />
+        <result column="FUND_CODE" property="fundCode" />
+        <result column="FUND_NAME" property="fundName" />
+        <result column="FUND_TYPE" property="fundType" />
+        <result column="MANAGER" property="manager" />
+        <result column="ESTABLISH_DATE" property="establishDate" />
+        <result column="LATEST_NAV" property="latestNav" />
+        <result column="DAY_GROWTH" property="dayGrowth" />
+        <result column="WEEK_GROWTH" property="weekGrowth" />
+        <result column="MONTH_GROWTH" property="monthGrowth" />
+        <result column="QUARTER_GROWTH" property="quarterGrowth" />
+        <result column="YEAR_GROWTH" property="yearGrowth" />
+        <result column="ESTIMATED_DAY_GROWTH" property="estimatedDayGrowth" />
+        <result column="ESTIMATED_NAV" property="estimatedNav" />
+        <result column="ESTIMATED_PROFIT" property="estimatedProfit" />
+        <result column="CREATED_TIME" property="createdTime" />
+        <result column="UPDATED_TIME" property="updatedTime" />
+    </resultMap>
+
+    <insert id="insert" parameterType="Fund" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO FUND (
+            FUND_CODE, FUND_NAME, FUND_TYPE, MANAGER, ESTABLISH_DATE, 
+            LATEST_NAV, DAY_GROWTH, WEEK_GROWTH, MONTH_GROWTH, QUARTER_GROWTH, 
+            YEAR_GROWTH, ESTIMATED_DAY_GROWTH, ESTIMATED_NAV, ESTIMATED_PROFIT, 
+            CREATED_TIME, UPDATED_TIME
+        ) VALUES (
+            #{fundCode}, #{fundName}, #{fundType}, #{manager}, #{establishDate}, 
+            #{latestNav}, #{dayGrowth}, #{weekGrowth}, #{monthGrowth}, #{quarterGrowth}, 
+            #{yearGrowth}, #{estimatedDayGrowth}, #{estimatedNav}, #{estimatedProfit}, 
+            NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="Fund">
+        UPDATE FUND SET
+            FUND_NAME = #{fundName},
+            FUND_TYPE = #{fundType},
+            MANAGER = #{manager},
+            ESTABLISH_DATE = #{establishDate},
+            LATEST_NAV = #{latestNav},
+            DAY_GROWTH = #{dayGrowth},
+            WEEK_GROWTH = #{weekGrowth},
+            MONTH_GROWTH = #{monthGrowth},
+            QUARTER_GROWTH = #{quarterGrowth},
+            YEAR_GROWTH = #{yearGrowth},
+            ESTIMATED_DAY_GROWTH = #{estimatedDayGrowth},
+            ESTIMATED_NAV = #{estimatedNav},
+            ESTIMATED_PROFIT = #{estimatedProfit},
+            UPDATED_TIME = NOW()
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM FUND WHERE ID = #{id}
+    </delete>
+
+    <select id="selectById" parameterType="Long" resultMap="FundResultMap">
+        SELECT * FROM FUND WHERE ID = #{id}
+    </select>
+
+    <select id="selectByFundCode" parameterType="String" resultMap="FundResultMap">
+        SELECT * FROM FUND WHERE FUND_CODE = #{fundCode}
+    </select>
+
+    <select id="selectAll" resultMap="FundResultMap">
+        SELECT * FROM FUND
+    </select>
+
+    <select id="existsByFundCode" parameterType="String" resultType="Boolean">
+        SELECT COUNT(*) > 0 FROM FUND WHERE FUND_CODE = #{fundCode}
+    </select>
+</mapper>

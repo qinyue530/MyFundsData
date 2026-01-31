@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 用户Mapper XML配置文件 -->
+<mapper namespace="com.example.myfunds.mapper.UserMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="UserResultMap" type="com.example.myfunds.entity.User">
+        <id column="ID" property="id"/>
+        <result column="USERNAME" property="username"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="EMAIL" property="email"/>
+        <result column="PHONE" property="phone"/>
+        <result column="NICKNAME" property="nickname"/>
+        <result column="STATUS" property="status"/>
+        <result column="CREATED_TIME" property="createdTime"/>
+        <result column="UPDATED_TIME" property="updatedTime"/>
+    </resultMap>
+    
+    <!-- 根据ID查询用户 -->
+    <select id="selectById" resultMap="UserResultMap">
+        SELECT * FROM USER WHERE ID = #{id}
+    </select>
+    
+    <!-- 根据用户名查询用户 -->
+    <select id="selectByUsername" resultMap="UserResultMap">
+        SELECT * FROM USER WHERE USERNAME = #{username}
+    </select>
+    
+    <!-- 根据邮箱查询用户 -->
+    <select id="selectByEmail" resultMap="UserResultMap">
+        SELECT * FROM USER WHERE EMAIL = #{email}
+    </select>
+    
+    <!-- 根据手机号查询用户 -->
+    <select id="selectByPhone" resultMap="UserResultMap">
+        SELECT * FROM USER WHERE PHONE = #{phone}
+    </select>
+    
+    <!-- 插入用户信息 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO USER (
+            USERNAME, PASSWORD, EMAIL, PHONE, NICKNAME, STATUS,
+            CREATED_TIME, UPDATED_TIME
+        ) VALUES (
+            #{username}, #{password}, #{email}, #{phone}, #{nickname}, #{status},
+            NOW(), NOW()
+        )
+    </insert>
+    
+    <!-- 更新用户信息 -->
+    <update id="update">
+        UPDATE USER SET
+            USERNAME = #{username},
+            PASSWORD = #{password},
+            EMAIL = #{email},
+            PHONE = #{phone},
+            NICKNAME = #{nickname},
+            STATUS = #{status},
+            UPDATED_TIME = NOW()
+        WHERE ID = #{id}
+    </update>
+    
+    <!-- 根据ID删除用户 -->
+    <delete id="deleteById">
+        DELETE FROM USER WHERE ID = #{id}
+    </delete>
+</mapper>

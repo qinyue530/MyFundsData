@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myfunds.mapper.FixedInvestmentMapper">
+    <resultMap id="FixedInvestmentResultMap" type="com.example.myfunds.entity.FixedInvestment">
+        <id column="ID" property="id" />
+        <result column="FUND_ID" property="fund.id" />
+        <result column="USER_ID" property="userId" />
+        <result column="AMOUNT" property="amount" />
+        <result column="FREQUENCY" property="frequency" />
+        <result column="START_DATE" property="startDate" />
+        <result column="NEXT_EXECUTION_DATE" property="nextExecutionDate" />
+        <result column="STATUS" property="status" />
+        <result column="CREATED_TIME" property="createdTime" />
+        <result column="UPDATED_TIME" property="updatedTime" />
+    </resultMap>
+
+    <insert id="insert" parameterType="FixedInvestment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO FIXED_INVESTMENT (
+            FUND_ID, USER_ID, AMOUNT, FREQUENCY, START_DATE, 
+            NEXT_EXECUTION_DATE, STATUS, CREATED_TIME, UPDATED_TIME
+        ) VALUES (
+            #{fund.id}, #{userId}, #{amount}, #{frequency}, #{startDate}, 
+            #{nextExecutionDate}, #{status}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="FixedInvestment">
+        UPDATE FIXED_INVESTMENT SET
+            AMOUNT = #{amount},
+            FREQUENCY = #{frequency},
+            START_DATE = #{startDate},
+            NEXT_EXECUTION_DATE = #{nextExecutionDate},
+            STATUS = #{status},
+            UPDATED_TIME = NOW()
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM FIXED_INVESTMENT WHERE ID = #{id}
+    </delete>
+
+    <select id="selectById" parameterType="Long" resultMap="FixedInvestmentResultMap">
+        SELECT * FROM FIXED_INVESTMENT WHERE ID = #{id}
+    </select>
+
+    <select id="selectByUserId" parameterType="Long" resultMap="FixedInvestmentResultMap">
+        SELECT * FROM FIXED_INVESTMENT WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="selectByUserIdAndFundId" parameterType="map" resultMap="FixedInvestmentResultMap">
+        SELECT * FROM FIXED_INVESTMENT WHERE USER_ID = #{userId} AND FUND_ID = #{fundId}
+    </select>
+
+    <select id="selectByStatusAndNextExecutionDateBefore" parameterType="map" resultMap="FixedInvestmentResultMap">
+        SELECT * FROM FIXED_INVESTMENT 
+        WHERE STATUS = #{status} 
+        AND NEXT_EXECUTION_DATE &lt; #{nextExecutionDate}
+    </select>
+</mapper>

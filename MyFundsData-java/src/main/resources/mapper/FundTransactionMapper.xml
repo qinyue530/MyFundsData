@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myfunds.mapper.FundTransactionMapper">
+    <resultMap id="FundTransactionResultMap" type="com.example.myfunds.entity.FundTransaction">
+        <id column="ID" property="id" />
+        <result column="FUND_ID" property="fund.id" />
+        <result column="USER_ID" property="userId" />
+        <result column="TRANSACTION_TYPE" property="transactionType" />
+        <result column="TRANSACTION_AMOUNT" property="transactionAmount" />
+        <result column="TRANSACTION_SHARES" property="transactionShares" />
+        <result column="TRANSACTION_PRICE" property="transactionPrice" />
+        <result column="FEE" property="fee" />
+        <result column="STATUS" property="status" />
+        <result column="TRANSACTION_TIME" property="transactionTime" />
+        <result column="CREATED_TIME" property="createdTime" />
+        <result column="UPDATED_TIME" property="updatedTime" />
+    </resultMap>
+
+    <insert id="insert" parameterType="FundTransaction" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO FUND_TRANSACTION (
+            FUND_ID, USER_ID, TRANSACTION_TYPE, TRANSACTION_AMOUNT, TRANSACTION_SHARES, 
+            TRANSACTION_PRICE, FEE, STATUS, TRANSACTION_TIME, CREATED_TIME, UPDATED_TIME
+        ) VALUES (
+            #{fund.id}, #{userId}, #{transactionType}, #{transactionAmount}, #{transactionShares}, 
+            #{transactionPrice}, #{fee}, #{status}, #{transactionTime}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="FundTransaction">
+        UPDATE FUND_TRANSACTION SET
+            TRANSACTION_TYPE = #{transactionType},
+            TRANSACTION_AMOUNT = #{transactionAmount},
+            TRANSACTION_SHARES = #{transactionShares},
+            TRANSACTION_PRICE = #{transactionPrice},
+            FEE = #{fee},
+            STATUS = #{status},
+            TRANSACTION_TIME = #{transactionTime},
+            UPDATED_TIME = NOW()
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM FUND_TRANSACTION WHERE ID = #{id}
+    </delete>
+
+    <select id="selectById" parameterType="Long" resultMap="FundTransactionResultMap">
+        SELECT * FROM FUND_TRANSACTION WHERE ID = #{id}
+    </select>
+
+    <select id="selectByUserId" parameterType="Long" resultMap="FundTransactionResultMap">
+        SELECT * FROM FUND_TRANSACTION WHERE USER_ID = #{userId} ORDER BY TRANSACTION_TIME DESC
+    </select>
+
+    <select id="selectByFundId" parameterType="Long" resultMap="FundTransactionResultMap">
+        SELECT * FROM FUND_TRANSACTION WHERE FUND_ID = #{fundId} ORDER BY TRANSACTION_TIME DESC
+    </select>
+
+    <select id="selectByUserIdAndFundId" parameterType="map" resultMap="FundTransactionResultMap">
+        SELECT * FROM FUND_TRANSACTION WHERE USER_ID = #{userId} AND FUND_ID = #{fundId} ORDER BY TRANSACTION_TIME DESC
+    </select>
+
+    <select id="selectByStatus" parameterType="String" resultMap="FundTransactionResultMap">
+        SELECT * FROM FUND_TRANSACTION WHERE STATUS = #{status}
+    </select>
+</mapper>

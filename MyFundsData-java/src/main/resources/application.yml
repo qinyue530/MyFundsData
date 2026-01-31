@@ -1,0 +1,62 @@
+# 应用基本配置
+spring:
+  application:
+    name: myfunds-service
+  
+  # 数据库配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/myfunds?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  # MyBatis配置
+  mybatis:
+    mapperLocations: classpath:mapper/*.xml
+    typeAliasesPackage: com.example.myfunds.entity
+    configuration:
+      mapUnderscoreToCamelCase: true
+      logImpl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  
+  # Spring Cloud配置
+  cloud:
+    config:
+      enabled: false
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /myfunds
+
+# Eureka Client配置
+eureka:
+  client:
+    enabled: false
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.example.myfunds: DEBUG
+    org.springframework: WARN
+    org.apache.ibatis: DEBUG
+    org.mybatis.spring: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [userId:%X{userId:-}] - %msg%n"
+  file:
+    name: logs/myfunds.log
+    max-size: 10MB
+    max-history: 30
+
+# 应用特定配置
+myfunds:
+  trade:
+    fee-rate: 0.0015  # 交易费率
+  
+  # 外部API配置（实际项目中使用）
+  api:
+    fund-data-url: "https://api.example.com/fund"
+    api-key: "your-api-key"
